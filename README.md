@@ -41,18 +41,55 @@ To use Google Maps, you need to add your Google Maps API key. In app.json:
 ```bash
 {
   "expo": {
-    "name": "TunisieTransport",
-    "slug": "tunisie-transport",
+    "name": "Tunisie Transport",
+    "slug": "my-app",
     "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
     "android": {
       "config": {
         "googleMaps": {
-          "apiKey": "YOUR_GOOGLE_MAPS_API_KEY"
+          "apiKey": "YOUR_GOOGLE_MAPS_API_KEY_HERE"
         }
+      },
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.youssefmkm.tt"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "e4640fa7-fa03-4a26-9229-3e119d7245bb"
       }
     }
   }
 }
+
 ```
 In app.config.js:
 
