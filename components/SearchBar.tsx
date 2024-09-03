@@ -74,10 +74,7 @@ const styles = StyleSheet.create({
   },
   itemText: {
     color: '#000',
-  },
-  flatList: {
-    flex: 1, // Ensures FlatList takes up available space within the container
-  },
+  }
 });
 
 export default SearchBar;
