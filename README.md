@@ -1,7 +1,7 @@
 # Tunisie Transport - React Native App
 
 Welcome to the Tunisie Transport mobile application! This React Native project is designed to help users easily search for bus stops and view them on a map. The app uses Google Maps to display the locations of the bus stops in Tunis, Tunisia.
-
+Only available on Android devices.
 
 ## Features
 
