@@ -10,11 +10,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelect }) => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
 
+  // Function to handle search input change
   const handleChange = (text: string) => {
     setQuery(text);
     filterResults(text);
   };
 
+  // Filter bus stops based on NumLigne and NomStation
   const filterResults = (text: string) => {
     if (text) {
       const filtered = busStops.filter(stop => {
@@ -42,7 +44,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelect }) => {
       <TextInput
         value={query}
         onChangeText={handleChange}
-        placeholder="Search by NumLigne or station name"
+        placeholder="Search by N° Ligne or station name"
         style={styles.input}
       />
       <FlatList

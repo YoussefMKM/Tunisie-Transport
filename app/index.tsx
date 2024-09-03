@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SearchBar from '@/components/SearchBar';
 import { busStops } from '@/constants/bus-stops'; // Ensure this path is correct
 
+const DismissKeyboard = ({ children }) => (
+  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+    {children}
+  </TouchableWithoutFeedback>
+);
+
 export default function HomeScreen() {
   const [selectedNumLigne, setSelectedNumLigne] = useState(null);
 
+  // Handler function to update selected stop
   const handleSelect = (item) => {
     setSelectedNumLigne(item.NumLigne); // Store the NumLigne for selected stop
   };
@@ -20,7 +27,7 @@ export default function HomeScreen() {
   return (
     <GestureHandlerRootView style={styles.container}>
       <View style={styles.innerContainer}>
-        <Text>Tunisie Transport</Text>
+        <Text>Tunisie Transport by Youssef Dardouri</Text>
         <SearchBar onSelect={handleSelect} />
         {selectedNumLigne && (
           <Text style={styles.selectedText}>Showing markers for Ligne: {selectedNumLigne}</Text>
@@ -44,7 +51,7 @@ export default function HomeScreen() {
                 latitude: parseFloat(stop.Latitude),
                 longitude: parseFloat(stop.Longitude),
               }}
-              description={`Line: ${stop.NumLigne}, Stop: ${stop.NumStation}`}
+              description={`Ligne: ${stop.NumLigne}, Stop: ${stop.NumStation}`}
               title={stop.NomStation}
             />
           ))}
@@ -69,14 +76,3 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
 });
-
-/*{busStops.map((stop) => (
-              <Marker
-              key={stop.ID}
-              coordinate={{
-                latitude: parseFloat(stop.Latitude),
-                longitude: parseFloat(stop.Longitude),
-              }}
-            description={`Line: ${stop.NumLigne}, Stop: ${stop.NumStation}`}
-            title={stop.NomStation}
-          />))} */
