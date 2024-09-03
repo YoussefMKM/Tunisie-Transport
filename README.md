@@ -67,24 +67,24 @@ This will start the Expo development server and open a new tab in your browser. 
 
 # Usage
 
--Search for Bus Stops: Use the search bar to find bus stops by entering a line number (NumLigne) or station name (NomStation).
--View on Map: After selecting a bus stop, it will be displayed on the map with a marker.
--Multiple Markers: If multiple stops belong to the same line, all will be shown on the map.
+- Search for Bus Stops: Use the search bar to find bus stops by entering a line number (NumLigne) or station name (NomStation).
+- View on Map: After selecting a bus stop, it will be displayed on the map with a marker.
+- Multiple Markers: If multiple stops belong to the same line, all will be shown on the map.
 
 # Configuration
 
 If you need to configure the project further, you can do so in the following files:
 
-app.json/app.config.js: Main configuration file for Expo projects.
-constants/bus-stops.ts: Contains the list of bus stops with details like line number, station name, latitude, and longitude.
+- app.json/app.config.js: Main configuration file for Expo projects.
+- constants/bus-stops.ts: Contains the list of bus stops with details like line number, station name, latitude, and longitude.
 
 # Contributing
 
 Contributions are welcome! Please follow these steps to contribute:
 
--Fork the repository.
--Create a new branch (git checkout -b feature/your-feature).
--Make your changes.
--Commit your changes (git commit -am 'Add new feature').
--Push to the branch (git push origin feature/your-feature).
--Create a new Pull Request.
+- Fork the repository.
+- Create a new branch (git checkout -b feature/your-feature).
+- Make your changes.
+- Commit your changes (git commit -am 'Add new feature').
+- Push to the branch (git push origin feature/your-feature).
+- Create a new Pull Request.
