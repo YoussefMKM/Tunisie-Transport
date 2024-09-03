@@ -51,7 +51,7 @@ To use Google Maps, you need to add your Google Maps API key. In app.json:
     }
   }
 }
-````
+```
 In app.config.js:
 
 4. **Start the Development Server:**
