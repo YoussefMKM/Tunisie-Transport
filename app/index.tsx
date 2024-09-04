@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { Text, View, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View, StyleSheet, TouchableWithoutFeedback, Keyboard, Platform } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SearchBar from '@/components/SearchBar';
 import { busStops } from '@/constants/bus-stops';
+import * as Location from 'expo-location';
 import busicon from '@/assets/images/BusIcon2.png';
 
 
@@ -16,7 +17,32 @@ export default function HomeScreen() {
       {children}
     </TouchableWithoutFeedback>
   );
+  
+  
+  
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
 
+  useEffect(() => {
+    (async () => {
+      
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
+  }, []);
+
+  let text = '';
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (location) {
+    text = JSON.stringify(location);
+  }
 // Route work in progress
 /*  const getRoute = async () => {
     const response = await fetch(
@@ -50,8 +76,6 @@ export default function HomeScreen() {
     ? busStops.filter(stop => stop.NumLigne === selectedNumLigne)
     : [];
   
-  console.log(filteredStops);
-
   const coordinates = filteredStops.map((stop) => ({
     latitude: parseFloat(stop.Latitude),
     longitude: parseFloat(stop.Longitude),
@@ -64,12 +88,14 @@ export default function HomeScreen() {
           <Text>Tunisie Transport by Youssef Dardouri</Text>
           <SearchBar onSelect={handleSelect} />
           {selectedNumLigne && (
-            <Text style={styles.selectedText}>Showing markers for Ligne: {selectedNumLigne}</Text>
+            <><Text style={styles.selectedText}>Showing markers for Ligne: {selectedNumLigne}</Text><Text>{text}</Text></>
+            
           )}
           <MapView
             style={styles.map}
             provider='google'
             mapType='standard'
+            showsUserLocation
             initialRegion={{
               latitude: 36.8065, // center of Tunis
               longitude: 10.1815,
