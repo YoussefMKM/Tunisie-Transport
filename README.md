@@ -15,6 +15,10 @@ Only available on Android devices.
 ![1725398673679](https://github.com/user-attachments/assets/698dc0ed-fa4a-4a61-a8ca-1268186273b5)
 
 
+## Download
+Please Download the latest version ![here](https://github.com/YoussefMKM/Tunisie_Transport/releases/download/alpha/Tunisie-Transport-v0.1.0-alpha.apk)
+
+
 ## Installation
 
 Follow these steps to get the project up and running on your local machine.
@@ -91,7 +95,6 @@ To use Google Maps, you need to add your Google Maps API key. In app.json:
 }
 
 ```
-In app.config.js:
 
 4. **Start the Development Server:**
 
