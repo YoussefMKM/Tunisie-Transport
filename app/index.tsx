@@ -37,12 +37,13 @@ export default function HomeScreen() {
     })();
   }, []);
 
-  let text = '';
+/*  let text = '';
   if (errorMsg) {
     text = errorMsg;
   } else if (location) {
     text = JSON.stringify(location);
   }
+*/
 // Route work in progress
 /*  const getRoute = async () => {
     const response = await fetch(
@@ -88,7 +89,7 @@ export default function HomeScreen() {
           <Text>Tunisie Transport by Youssef Dardouri</Text>
           <SearchBar onSelect={handleSelect} />
           {selectedNumLigne && (
-            <><Text style={styles.selectedText}>Showing markers for Ligne: {selectedNumLigne}</Text><Text>{text}</Text></>
+            <Text style={styles.selectedText}>Showing markers for Ligne: {selectedNumLigne}</Text>
             
           )}
           <MapView
