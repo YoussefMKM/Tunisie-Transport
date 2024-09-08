@@ -23,8 +23,6 @@ function BottomSheetProp({stops}) {
 
     // renders
     return (
-        
-      
         <BottomSheet
         ref={bottomSheetRef}
         onChange={handleSheetChanges}

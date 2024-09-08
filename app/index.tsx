@@ -9,6 +9,7 @@ import * as Location from 'expo-location';
 import busicon from '@/assets/images/BusIcon2.png';
 import BottomSheetProp from '@/components/BottomSheet';
 import MyComponent from '@/components/Chip';
+import * as NavigationBar from 'expo-navigation-bar';
 
 export default function HomeScreen() {
   const [selectedNumLigne, setSelectedNumLigne] = useState<number | null>(null);
@@ -21,6 +22,7 @@ export default function HomeScreen() {
       {children}
     </TouchableWithoutFeedback>
   );
+
 
   useEffect(() => {
     (async () => {
@@ -52,7 +54,11 @@ export default function HomeScreen() {
     <GestureHandlerRootView style={styles.container}>
       <DismissKeyboard>
         <View style={styles.innerContainer}>
-          <SearchBar onSelect={handleSelect} /> <MyComponent></MyComponent>
+          <SearchBar onSelect={handleSelect} />
+          {selectedNumLigne && (
+            <Text style={styles.selectedText}>Showing markers for Ligne: {selectedNumLigne}</Text>
+            
+          )}
           <MapView
             style={styles.map}
             provider='google'
