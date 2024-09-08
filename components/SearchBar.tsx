@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, FlatList, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { busStops } from '@/constants/bus-stops'; // Adjust the path if necessary
+import { Searchbar } from 'react-native-paper';
 
 interface SearchBarProps {
   onSelect: (item: any) => void; // Replace 'any' with the appropriate type
@@ -39,13 +40,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelect }) => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-    <View style={styles.searchContainer}>
-      <TextInput
+    <SafeAreaView>
+    <View>
+      <Searchbar
         value={query}
+        style={styles.Searchbar}
         onChangeText={handleChange}
         placeholder="Search by N° Ligne or station name"
-        style={styles.input}
+        elevation={4}
       />
       <FlatList
         data={results}
@@ -62,13 +64,13 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelect }) => {
 };
 
 const styles = StyleSheet.create({
-  input: {
-    borderWidth: 1,
+  Searchbar: {
+    borderWidth: 0.5,
     padding: 8,
-    marginBottom: 10,
+    margin: 10,
   },
   item: {
-    padding: 10,
+    padding: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },

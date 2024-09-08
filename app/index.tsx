@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, TouchableWithoutFeedback, Keyboard, Platform } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Text, View, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -7,91 +7,52 @@ import SearchBar from '@/components/SearchBar';
 import { busStops } from '@/constants/bus-stops';
 import * as Location from 'expo-location';
 import busicon from '@/assets/images/BusIcon2.png';
-
+import BottomSheetProp from '@/components/BottomSheet';
+import MyComponent from '@/components/Chip';
 
 export default function HomeScreen() {
-  const [selectedNumLigne, setSelectedNumLigne] = useState(null);
+  const [selectedNumLigne, setSelectedNumLigne] = useState<number | null>(null);
+  const [location, setLocation] = useState<Location.LocationObject | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const mapRef = useRef<MapView | null>(null);
 
   const DismissKeyboard = ({ children }) => (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       {children}
     </TouchableWithoutFeedback>
   );
-  
-  
-  
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
     (async () => {
-      
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
         return;
       }
-
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
     })();
   }, []);
 
-/*  let text = '';
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
-  }
-*/
-// Route work in progress
-/*  const getRoute = async () => {
-    const response = await fetch(
-      `https://maps.googleapis.com/maps/api/directions/json?origin=${startLocation}&destination=${endLocation}&waypoints=${waypoints}&key=YOUR_API_KEY`
-    );
-    const data = await response.json();
-    const points = decode(data.routes[0].overview_polyline.points);
-    setCoordinates(points);
-  };
-
-  const decode = (t, e) => {
-    let points = Polyline.decode(t);
-    let coords = points.map((point, index) => {
-      return {
-        latitude: point[0],
-        longitude: point[1]
-      };
-    });
-    return coords;
-  };
-*/
-  
-
-  // Handler function to update selected stop
   const handleSelect = (item) => {
-    setSelectedNumLigne(item.NumLigne); // Store the NumLigne for selected stop
+    setSelectedNumLigne(item.NumLigne);
   };
 
-  // Filter bus stops based on selected NumLigne
   const filteredStops = selectedNumLigne
     ? busStops.filter(stop => stop.NumLigne === selectedNumLigne)
     : [];
-  
-  const coordinates = filteredStops.map((stop) => ({
+
+  const coordinates = filteredStops.map(stop => ({
     latitude: parseFloat(stop.Latitude),
     longitude: parseFloat(stop.Longitude),
   }));
-  
+
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <DismissKeyboard>
         <View style={styles.innerContainer}>
-          <Text>Tunisie Transport by Youssef Dardouri</Text>
-          <SearchBar onSelect={handleSelect} />
-          {selectedNumLigne && (
-            <Text style={styles.selectedText}>Showing markers for Ligne: {selectedNumLigne}</Text>
-            
-          )}
+          <SearchBar onSelect={handleSelect} /> <MyComponent></MyComponent>
           <MapView
             style={styles.map}
             provider='google'
@@ -100,19 +61,19 @@ export default function HomeScreen() {
             initialRegion={{
               latitude: 36.8065, // center of Tunis
               longitude: 10.1815,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
+              latitudeDelta: 0.1,
+              longitudeDelta: 0.1,
             }}
-          >
-          
-<Polyline
-  coordinates={coordinates}
-  strokeColor="#FF0000" // Customize the color of the polyline
-  strokeWidth={5}    // Customize the width of the polyline
-  lineCap='round'
-  lineJoin='bevel'
-/>
-{filteredStops.map((stop) => (
+            ref={mapRef}
+            >
+            <Polyline
+              coordinates={coordinates}
+              strokeColor="#FF0000" // Customize the color of the polyline
+              strokeWidth={5} // Customize the width of the polyline
+              lineCap='round'
+              lineJoin='bevel'
+            />
+            {filteredStops.map((stop) => (
               <Marker
                 key={stop.ID}
                 image={busicon}
@@ -125,23 +86,14 @@ export default function HomeScreen() {
               />
             ))}
           </MapView>
-          <StatusBar style="dark" />
+          <BottomSheetProp stops={filteredStops}/>
+          <StatusBar style='dark' />
         </View>
       </DismissKeyboard>
     </GestureHandlerRootView>
   );
 }
-/*{filteredStops.map((stop) => (
-              <Marker
-                key={stop.ID}
-                coordinate={{
-                  latitude: parseFloat(stop.Latitude),
-                  longitude: parseFloat(stop.Longitude),
-                }}
-                description={`Ligne: ${stop.NumLigne}, Stop: ${stop.NumStation}`}
-                title={stop.NomStation}
-              />
-            ))}*/
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
