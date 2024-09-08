@@ -12,8 +12,7 @@ Only available on Android devices.
 - **Expo Managed Workflow:** Built using Expo for easy development and deployment.
 
 ## Screenshots
-![1725398673679](https://github.com/user-attachments/assets/698dc0ed-fa4a-4a61-a8ca-1268186273b5)
-
+![Screenshot_2024-09-08-19-37-39-215](https://github.com/user-attachments/assets/b8b09acc-b99f-426c-8538-57bc3bfde2ec)
 
 ## Download
 Please Download the latest version ![here](https://github.com/YoussefMKM/Tunisie_Transport/releases/download/alpha/Tunisie-Transport-v0.1.0-alpha.apk)
