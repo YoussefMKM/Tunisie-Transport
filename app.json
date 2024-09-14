@@ -3,7 +3,7 @@
   "expo": {
     "name": "Tunisie Transport",
     "slug": "my-app",
-    "version": "1.0.0",
+    "version": "0.3.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -25,7 +25,7 @@
         }
       },
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       }
     },
