@@ -11,10 +11,13 @@ import BottomSheetProp from '@/components/BottomSheet';
 import CustomButton from '@/components/CustomButton';
 import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
 import {
+  MD3Colors,
   MD3DarkTheme,
   MD3LightTheme,
   PaperProvider,
 } from 'react-native-paper';
+
+
 
 export default function HomeScreen() {
   //theme stuff
@@ -25,6 +28,7 @@ export default function HomeScreen() {
     colorScheme === 'dark'
       ? { ...MD3DarkTheme, colors: theme.dark }
       : { ...MD3LightTheme, colors: theme.light };
+  
 
   const [selectedNumLigne, setSelectedNumLigne] = useState<number | null>(null);
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
@@ -55,6 +59,10 @@ export default function HomeScreen() {
     setSelectedNumLigne(item.NumLigne);
   };
 
+  const handleBottomSheetNumLigneSelect = (numLigne: string) => {
+    setSelectedNumLigne(parseInt(numLigne));
+  };
+
   const filteredStops = selectedNumLigne
     ? busStops.filter(stop => stop.NumLigne === selectedNumLigne)
     : [];
@@ -64,6 +72,15 @@ export default function HomeScreen() {
     longitude: parseFloat(stop.Longitude),
   }));
 
+  useEffect(() => {
+    if (filteredStops.length > 0) {
+      mapRef.current?.fitToCoordinates(coordinates, {
+        edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
+        animated: true,
+      });
+    }
+  }, [filteredStops]);
+
 
   return (
     <PaperProvider theme={paperTheme}>
@@ -72,42 +89,49 @@ export default function HomeScreen() {
           <View style={styles.innerContainer}>
             <SearchBar onSelect={handleSelect} />
             
-            <MapView
-              style={styles.map}
-              provider='google'
-              mapType='standard'
-              showsUserLocation
-              initialRegion={{
-                latitude: 36.8065, // center of Tunis
-                longitude: 10.1815,
-                latitudeDelta: 0.1,
-                longitudeDelta: 0.1,
-              }}
-              ref={mapRef}
+            <View style={styles.mapcontainer}>
+              <MapView
+                provider='google'
+                style={styles.map}
+                mapType='standard'
+                userInterfaceStyle='dark'
+                initialRegion={{
+                  latitude: 36.8065,
+                  longitude: 10.1815,
+                  latitudeDelta: 0.1,
+                  longitudeDelta: 0.1,
+                }}
+                ref={mapRef}
               >
-              <Polyline
-                coordinates={coordinates}
-                strokeColor="#FF0000" // Customize the color of the polyline
-                strokeWidth={5} // Customize the width of the polyline
-                lineCap='round'
-                lineJoin='bevel'
-              />
-              {filteredStops.map((stop) => (
-                <Marker
-                  key={stop.ID}
-                  image={busicon}
-                  coordinate={{
-                    latitude: parseFloat(stop.Latitude),
-                    longitude: parseFloat(stop.Longitude),
-                  }}
-                  description={`Ligne: ${stop.NumLigne}, Stop: ${stop.NumStation}`}
-                  title={stop.NomStation}
+                <Polyline
+                  coordinates={coordinates}
+                  strokeColor="#FF0000"
+                  strokeWidth={5}
+                  lineCap='round'
+                  lineJoin='bevel'
                 />
-              ))}
-            </MapView>
+                {filteredStops.map((stop) => (
+                  <Marker
+                    key={stop.ID}
+                    image={busicon}
+                    coordinate={{
+                      latitude: parseFloat(stop.Latitude),
+                      longitude: parseFloat(stop.Longitude),
+                    }}
+                    description={`Ligne: ${stop.NumLigne}, Stop: ${stop.NumStation}`}
+                    title={stop.NomStation}
+                  />
+                ))}
+              </MapView>
+            </View>
       
-            <View  style={styles.CustomButton1}><CustomButton NumLigne={filteredStops ? Object.values(filteredStops)[0]?.NumLigne : null} filteredStops={filteredStops}></CustomButton></View>
-            <BottomSheetProp/>
+            <View style={styles.CustomButton1}>
+              <CustomButton 
+                NumLigne={filteredStops.length > 0 ? filteredStops[0].NumLigne : null} 
+                filteredStops={filteredStops}
+              />
+            </View>
+            <BottomSheetProp onNumLigneSelect={handleBottomSheetNumLigneSelect} />
             <StatusBar style='dark' />
           </View>
         </DismissKeyboard>
@@ -127,6 +151,14 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
   },
+  mapcontainer: {
+    flex: 1,
+    width: '100%',
+    marginBottom:60,
+    borderRadius:5,
+    borderColor:MD3Colors.primary50,
+    borderWidth:4,
+  },
   selectedText: {
     marginVertical: 10,
   },
@@ -138,8 +170,6 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 8, // Shadow for Android
-    shadowColor: '#000', // Shadow for iOS
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
