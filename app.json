@@ -35,6 +35,14 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      [
+        // highlight-start
+                "@rnmapbox/maps",
+                {
+                  "RNMapboxMapsDownloadToken": "pk.eyJ1IjoieW91c3NlZm1rbSIsImEiOiJjbTJlbzN6ZDAwMGJ5MnJxeWhnbmhuODg2In0.rc182n4lttjq2unueYUmAw"
+                }
+        // highlight-end
+              ],
       "expo-router",
       [
         "expo-location",
