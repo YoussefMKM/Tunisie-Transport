@@ -39,7 +39,8 @@
         // highlight-start
                 "@rnmapbox/maps",
                 {
-                  "RNMapboxMapsDownloadToken": "pk.eyJ1IjoieW91c3NlZm1rbSIsImEiOiJjbTJlbzN6ZDAwMGJ5MnJxeWhnbmhuODg2In0.rc182n4lttjq2unueYUmAw"
+                  "RNMapboxMapsDownloadToken": "pk.eyJ1IjoieW91c3NlZm1rbSIsImEiOiJjbTJlbzN6ZDAwMGJ5MnJxeWhnbmhuODg2In0.rc182n4lttjq2unueYUmAw",
+                  "RNMapboxMapsVersion": "11.0.0"
                 }
         // highlight-end
               ],
@@ -47,7 +48,7 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+          "locationWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
         }
       ]
     ],
