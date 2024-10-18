@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Text, View, StyleSheet, TouchableWithoutFeedback, Keyboard, useColorScheme } from 'react-native';
-import MapView, { Marker, Polyline } from 'react-native-maps';
+import MapboxGL from '@rnmapbox/maps';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import SearchBar from '@/components/SearchBar';
@@ -18,9 +18,8 @@ import {
 } from 'react-native-paper';
 
 
-
 export default function HomeScreen() {
-  //theme stuff
+  // Theme setup
   const colorScheme = useColorScheme();
   const { theme } = useMaterial3Theme();
 
@@ -29,19 +28,16 @@ export default function HomeScreen() {
       ? { ...MD3DarkTheme, colors: theme.dark }
       : { ...MD3LightTheme, colors: theme.light };
   
-
   const [selectedNumLigne, setSelectedNumLigne] = useState<number | null>(null);
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const mapRef = useRef<MapView | null>(null);
-
+  const mapRef = useRef(null);
 
   const DismissKeyboard = ({ children }) => (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       {children}
     </TouchableWithoutFeedback>
   );
-
 
   useEffect(() => {
     (async () => {
@@ -67,20 +63,20 @@ export default function HomeScreen() {
     ? busStops.filter(stop => stop.NumLigne === selectedNumLigne)
     : [];
 
-  const coordinates = filteredStops.map(stop => ({
-    latitude: parseFloat(stop.Latitude),
-    longitude: parseFloat(stop.Longitude),
-  }));
+  const coordinates = filteredStops.map(stop => [
+    parseFloat(stop.Longitude),
+    parseFloat(stop.Latitude)
+  ]);
 
   useEffect(() => {
     if (filteredStops.length > 0) {
-      mapRef.current?.fitToCoordinates(coordinates, {
-        edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
-        animated: true,
-      });
+      mapRef.current?.fitBounds(
+        [Math.min(...coordinates.map(coord => coord[0])), Math.min(...coordinates.map(coord => coord[1]))],
+        [Math.max(...coordinates.map(coord => coord[0])), Math.max(...coordinates.map(coord => coord[1]))],
+        { padding: 50, animated: true }
+      );
     }
   }, [filteredStops]);
-
 
   return (
     <PaperProvider theme={paperTheme}>
@@ -90,39 +86,53 @@ export default function HomeScreen() {
             <SearchBar onSelect={handleSelect} />
             
             <View style={styles.mapcontainer}>
-              <MapView
-                provider='google'
+              <MapboxGL.MapView
                 style={styles.map}
-                mapType='standard'
-                userInterfaceStyle='dark'
-                initialRegion={{
-                  latitude: 36.8065,
-                  longitude: 10.1815,
-                  latitudeDelta: 0.1,
-                  longitudeDelta: 0.1,
-                }}
                 ref={mapRef}
+                zoomEnabled={true}
+                pitchEnabled={true}
               >
-                <Polyline
-                  coordinates={coordinates}
-                  strokeColor="#FF0000"
-                  strokeWidth={5}
-                  lineCap='round'
-                  lineJoin='bevel'
+                <MapboxGL.Camera
+                  zoomLevel={10}
+                  centerCoordinate={[10.1815, 36.8065]}
                 />
-                {filteredStops.map((stop) => (
-                  <Marker
-                    key={stop.ID}
-                    image={busicon}
-                    coordinate={{
-                      latitude: parseFloat(stop.Latitude),
-                      longitude: parseFloat(stop.Longitude),
+                
+                {/* Polyline (LineLayer) */}
+                <MapboxGL.ShapeSource
+                  id="lineSource"
+                  shape={{
+                    type: 'Feature',
+                    geometry: {
+                      type: 'LineString',
+                      coordinates: coordinates,
+                    },
+                  }}
+                >
+                  <MapboxGL.LineLayer
+                    id="lineLayer"
+                    style={{
+                      lineColor: "#FF0000",
+                      lineWidth: 5,
+                      lineCap: 'round',
+                      lineJoin: 'bevel',
                     }}
-                    description={`Ligne: ${stop.NumLigne}, Stop: ${stop.NumStation}`}
-                    title={stop.NomStation}
                   />
+                </MapboxGL.ShapeSource>
+
+                {/* Markers */}
+                {filteredStops.map((stop) => (
+                  <MapboxGL.PointAnnotation
+                    key={stop.ID}
+                    id={`marker-${stop.ID}`}
+                    coordinate={[parseFloat(stop.Longitude), parseFloat(stop.Latitude)]}
+                  >
+                    <View style={styles.markerContainer}>
+                      <View style={styles.marker} />
+                      <Text>{stop.NomStation}</Text>
+                    </View>
+                  </MapboxGL.PointAnnotation>
                 ))}
-              </MapView>
+              </MapboxGL.MapView>
             </View>
       
             <View style={styles.CustomButton1}>
@@ -154,18 +164,25 @@ const styles = StyleSheet.create({
   mapcontainer: {
     flex: 1,
     width: '100%',
-    marginBottom:60,
-    borderRadius:5,
-    borderColor:MD3Colors.primary50,
-    borderWidth:4,
+    marginBottom: 60,
+    borderRadius: 5,
+    borderColor: MD3Colors.primary50,
+    borderWidth: 4,
   },
-  selectedText: {
-    marginVertical: 10,
+  markerContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  CustomButton1:{
+  marker: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: 'red',
+  },
+  CustomButton1: {
     position: 'absolute',
-    bottom: 70, // Position from bottom
-    right: 0, // Position from right
+    bottom: 70,
+    right: 0,
     width: 200,
     height: 60,
     justifyContent: 'center',
@@ -173,6 +190,5 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
-  }
+  },
 });
-
