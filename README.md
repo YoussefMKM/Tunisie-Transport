@@ -1,7 +1,8 @@
 # Tunisie Transport - React Native App
 
-Welcome to the Tunisie Transport mobile application! This React Native project is designed to help users easily search for bus stops and view them on a map. The app uses Google Maps to display the locations of the bus stops in Tunis, Tunisia.
+Welcome to the Tunisie Transport mobile application! This is my first React Native project and it is designed to help users easily search for bus stops and view them on a map. The app uses Google Maps to display the locations of the bus stops in Tunis, Tunisia.
 Only available on Android devices.
+
 
 ## Features
 
@@ -11,11 +12,12 @@ Only available on Android devices.
 - **Markers:** Shows all markers for a selected line on the map.
 - **Expo Managed Workflow:** Built using Expo for easy development and deployment.
 
-## Screenshots
-![Screenshot_2024-09-08-19-37-39-215](https://github.com/user-attachments/assets/b8b09acc-b99f-426c-8538-57bc3bfde2ec)
+## Video preview
+
+https://github.com/user-attachments/assets/f1c1c46e-8d47-439d-98d5-883973aaf1f9
 
 ## Download
-Please Download the latest version ![here](https://github.com/YoussefMKM/Tunisie_Transport/releases/download/alpha/Tunisie-Transport-v0.1.0-alpha.apk)
+Please Download the latest version ![here](https://github.com/YoussefMKM/Tunisie_Transport/releases/download/alpha/Tunisie-Transport-v0.4.0-alpha.apk)
 
 
 ## Installation
@@ -99,10 +101,9 @@ To use Google Maps, you need to add your Google Maps API key. In app.json:
 
 Run the following command to start the development server:
 
-``npm start``
-or
-``yarn start``
-This will start the Expo development server and open a new tab in your browser. You can use the Expo Go app to view your app on your mobile device, or use an emulator.
+``npx expo start``
+
+This will start the Expo development server. You can use the Expo Go app to view your app on your mobile device, or use an emulator.
 
 # Usage
 
